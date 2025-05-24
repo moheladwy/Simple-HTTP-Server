@@ -2,10 +2,10 @@ name: C Project Build Check
 
 on:
   push:
-    branches-ignore:
-      - master
+    branches:
+      - main
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
   build:
