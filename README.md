@@ -41,6 +41,22 @@ make run
 make clean
 ```
 
+## Docker Support
+
+### Build the Docker image
+
+```bash
+docker build -t simple-http-server .
+```
+
+### Run the server in a container
+
+```bash
+docker run -p 8080:8080 -n simple-http-server simple-http-server
+```
+
+This maps port 8080 from the container to port 8080 on your host machine and mounts your current directory as content to be served.
+
 ## Usage
 
 1. Start the server using `make run`
@@ -56,7 +72,6 @@ make clean
 5. Determines the content type based on file extension
 6. Sends the file content to the client with proper HTTP headers
 
-
 ## Limitations
 
 This is a simple demonstration server intended for educational purposes. It doesn't support:
@@ -65,7 +80,6 @@ This is a simple demonstration server intended for educational purposes. It does
 - HTTP methods other than GET
 - Dynamic content generation
 - Security features
-
 
 ## License
 
