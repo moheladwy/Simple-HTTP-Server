@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     off_t file_size = get_file_size_from_fd(open_fd);
     if (file_size < 0)
     {
-        perror("fstat");
+        perror("get_file_size");
         close(open_fd);
         close(client_fd);
         close(s);

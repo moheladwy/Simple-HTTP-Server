@@ -8,17 +8,19 @@ const HttpStatus HTTP_BAD_REQUEST = {400, "Bad Request"};
 const HttpStatus HTTP_UNAUTHORIZED = {401, "Unauthorized"};
 const HttpStatus HTTP_FORBIDDEN = {403, "Forbidden"};
 const HttpStatus HTTP_NOT_FOUND = {404, "Not Found"};
+const HttpStatus HTTP_METHOD_NOT_ALLOWED = {405, "Method Not Allowed"};
 const HttpStatus HTTP_INTERNAL_SERVER_ERROR = {500, "Internal Server Error"};
 
 // Array of all supported status codes
 static const HttpStatus STATUS_CODES[] = {
-    {200, "OK"},
-    {201, "Created"},
-    {400, "Bad Request"},
-    {401, "Unauthorized"},
-    {403, "Forbidden"},
-    {404, "Not Found"},
-    {500, "Internal Server Error"},
+    HTTP_OK,
+    HTTP_CREATED,
+    HTTP_BAD_REQUEST,
+    HTTP_UNAUTHORIZED,
+    HTTP_FORBIDDEN,
+    HTTP_NOT_FOUND,
+    HTTP_METHOD_NOT_ALLOWED,
+    HTTP_INTERNAL_SERVER_ERROR,
     // Add more status codes as needed
 };
 

@@ -44,26 +44,28 @@ make clean
 ## Usage
 
 1. Start the server using `make run`
-2. Navigate to http://localhost:8080/index.html in your web browser
+2. Navigate to <http://localhost:8080/index.html> in your web browser
    - Replace `index.html` with any file in the server directory you want to access
 
 ## How It Works
 
-The server:
-1. Creates a socket and binds it to port 8080
+1. The server creates a socket and binds it to port 8080
 2. Listens for incoming HTTP requests
 3. Parses the request to determine which file is being requested
 4. Checks if the file exists and sends appropriate status code
 5. Determines the content type based on file extension
 6. Sends the file content to the client with proper HTTP headers
 
+
 ## Limitations
 
 This is a simple demonstration server intended for educational purposes. It doesn't support:
+
 - Multiple concurrent connections
 - HTTP methods other than GET
 - Dynamic content generation
 - Security features
+
 
 ## License
 
