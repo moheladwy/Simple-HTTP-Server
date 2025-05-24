@@ -52,10 +52,10 @@ docker build -t simple-http-server .
 ### Run the server in a container
 
 ```bash
-docker run -p 8080:8080 -n simple-http-server simple-http-server
+docker run -p 8080:8080 --name simple-http-server simple-http-server
 ```
 
-This maps port 8080 from the container to port 8080 on your host machine and mounts your current directory as content to be served.
+This maps port 8080 from the container to port 8080 on your host machine.
 
 ## Usage
 

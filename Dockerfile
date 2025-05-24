@@ -2,9 +2,11 @@
 FROM alpine:3.18
 
 # Install necessary build tools
+ARG GCC_VERSION=13.2.0-r3
+ARG MUSL_VERSION=1.2.4-r0
 RUN apk add --no-cache \
-    gcc \
-    musl-dev \
+    gcc=${GCC_VERSION} \
+    musl-dev=${MUSL_VERSION} \
     make
 
 # Set working directory
