@@ -24,6 +24,14 @@ static const HttpStatus STATUS_CODES[] = {
 
 static const int STATUS_CODES_COUNT = sizeof(STATUS_CODES) / sizeof(HttpStatus);
 
+/**
+ * @brief Retrieves the HTTP status information for a given status code.
+ *
+ * Searches the set of supported HTTP status codes and returns a pointer to the corresponding `HttpStatus` structure if the code is found.
+ *
+ * @param code The numeric HTTP status code to look up.
+ * @return Pointer to the matching `HttpStatus` structure, or `NULL` if the code is not supported.
+ */
 const HttpStatus* get_status_by_code(int code) {
     for (int i = 0; i < STATUS_CODES_COUNT; i++) {
         if (STATUS_CODES[i].code == code) {
