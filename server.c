@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include "utils.h"
+#include "status_codes.h"
 
 #define PORT 8080
 #define ANY_ADDRESS 0
@@ -13,6 +15,13 @@
 #define BUFFER_SIZE 1024
 #define FLAGS 0
 
+/**
+ * @brief Runs a simple HTTP server that serves files over TCP on port 8080.
+ *
+ * Listens for a single client connection, parses an HTTP GET request, and attempts to serve the requested file from the local filesystem. Responds with the file contents and appropriate HTTP headers if the file exists, or a 404 Not Found response if it does not. Handles all socket setup, request parsing, file I/O, and cleanup before exiting.
+ *
+ * @return 0 on successful completion, or 1 if an error occurs during setup, connection, or file handling.
+ */
 int main(int argc, char *argv[])
 {
     // Create a socket
@@ -81,61 +90,35 @@ int main(int argc, char *argv[])
     if (open_fd < 0)
     {
         perror("open");
-        const char *not_found = "HTTP/1.0 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\n404 Not Found";
-        send(client_fd, not_found, strlen(not_found), 0);
-        close(open_fd);
+        char error_response[BUFFER_SIZE];
+        int content_length = strlen(HTTP_NOT_FOUND.message);
+        sprintf(error_response, "HTTP/1.0 %d %s\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s",
+                HTTP_NOT_FOUND.code, HTTP_NOT_FOUND.message, content_length, HTTP_NOT_FOUND.message);
+        send(client_fd, error_response, strlen(error_response), 0);
         close(client_fd);
         close(s);
         return 1;
     }
 
     // Get file size
-    struct stat file_stat;
-    if (fstat(open_fd, &file_stat) < 0)
+    off_t file_size = get_file_size_from_fd(open_fd);
+    if (file_size < 0)
     {
-        perror("fstat");
+        perror("get_file_size");
         close(open_fd);
         close(client_fd);
         close(s);
         return 1;
     }
-    off_t file_size = file_stat.st_size;
 
     // Determine content type based on file extension
-    const char *content_type = "text/plain"; // Default content type
-    char *ext = strrchr(file, '.');
-    if (ext != NULL)
-    {
-        if (strcmp(ext, ".html") == 0 || strcmp(ext, ".htm") == 0)
-        {
-            content_type = "text/html";
-        }
-        else if (strcmp(ext, ".css") == 0)
-        {
-            content_type = "text/css";
-        }
-        else if (strcmp(ext, ".js") == 0)
-        {
-            content_type = "application/javascript";
-        }
-        else if (strcmp(ext, ".jpg") == 0 || strcmp(ext, ".jpeg") == 0)
-        {
-            content_type = "image/jpeg";
-        }
-        else if (strcmp(ext, ".png") == 0)
-        {
-            content_type = "image/png";
-        }
-        else if (strcmp(ext, ".gif") == 0)
-        {
-            content_type = "image/gif";
-        }
-    }
+    const char *ext = get_file_extension(file);
+    const char *content_type = get_content_type_using_file_extension(ext);
 
     // Prepare and send HTTP header
     char header[BUFFER_SIZE];
-    sprintf(header, "HTTP/1.0 200 OK\r\nContent-Type: %s\r\nContent-Length: %ld\r\n\r\n",
-            content_type, (long)file_size);
+    sprintf(header, "HTTP/1.0 %d %s\r\nContent-Type: %s\r\nContent-Length: %ld\r\n\r\n",
+            HTTP_OK.code, HTTP_OK.message, content_type, (long)file_size);
     send(client_fd, header, strlen(header), 0);
 
     // Send the file to the client.
