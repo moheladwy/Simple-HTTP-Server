@@ -15,6 +15,13 @@
 #define BUFFER_SIZE 1024
 #define FLAGS 0
 
+/**
+ * @brief Runs a simple HTTP server that serves files over TCP on port 8080.
+ *
+ * Listens for a single client connection, parses an HTTP GET request, and attempts to serve the requested file from the local filesystem. Responds with the file contents and appropriate HTTP headers if the file exists, or a 404 Not Found response if it does not. Handles all socket setup, request parsing, file I/O, and cleanup before exiting.
+ *
+ * @return 0 on successful completion, or 1 if an error occurs during setup, connection, or file handling.
+ */
 int main(int argc, char *argv[])
 {
     // Create a socket
